@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>GifBuilder — Starter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Tiny Backpack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0a0a0a; overflow: hidden; }
   #root { position: absolute; inset: 0; }
 </style>
+
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
@@ -18,16 +20,26 @@
 </head>
 <body>
 <div id="root"></div>
+
 <script type="text/babel" src="animations.jsx"></script>
 <script type="text/babel" src="scenes.jsx"></script>
-<script type="text/babel">
-  const DURATION = 5;
 
+<script type="text/babel">
+  // "The Tiny Backpack" — 480x270, 24fps, 12s, 288 frames.
   function App() {
     return (
-      <Stage width={1280} height={720} duration={DURATION} background="#f6f4ef" loop={true}>
-        <StarterScene start={0} end={DURATION} />
-      </Stage>
+      <Stage
+        width={480}
+        height={270}
+        fps={24}
+        duration={12}
+        loop={true}
+        scale={2}
+        exportScale={3}
+        filename="tiny-backpack.gif"
+        draw={window.drawTinyBackpack}
+        sceneLabel={window.sceneLabel}
+      />
     );
   }
 
