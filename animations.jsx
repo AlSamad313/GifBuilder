@@ -173,7 +173,6 @@ function Stage({
 
   const time = frame / fps;
   const pct = totalFrames > 1 ? (frame / (totalFrames - 1)) * 100 : 0;
-  const label = typeof sceneLabel === 'function' ? sceneLabel(frame) : '';
   const mono = 'JetBrains Mono, ui-monospace, monospace';
   const fmt = (t) => `${t.toFixed(2)}s`;
 
@@ -208,24 +207,6 @@ function Stage({
             borderRadius: 4,
           }}
         />
-        {label && (
-          <div style={{
-            position: 'absolute',
-            bottom: 12, left: '50%', transform: 'translateX(-50%)',
-            padding: '6px 14px',
-            background: 'rgba(10,8,4,0.82)',
-            border: '1px solid rgba(255,204,102,0.4)',
-            borderRadius: 4,
-            color: '#ffcc66',
-            fontFamily: '"Press Start 2P", ui-monospace, monospace',
-            fontSize: 10,
-            letterSpacing: '0.06em',
-            whiteSpace: 'nowrap',
-            textShadow: '1px 1px 0 #000',
-          }}>
-            {label}
-          </div>
-        )}
       </div>
 
       {/* Playback bar */}

@@ -19,11 +19,19 @@ const FR = {
 };
 
 // ── Palette ───────────────────────────────────────────────────────────────────
+// Cyberpunk neon palette
+const NEON = {
+  bg0: "#0a0a1a", bg1: "#1a1a2a", bg2: "#12121f",
+  building: "#2a2a3a", buildingDk: "#1c1c2a",
+  cyan: "#00ffff", magenta: "#ff00ff", pink: "#ff0080",
+  blue: "#00bfff", green: "#39ff14", purple: "#b026ff",
+  cyanDk: "#0aa", line: "#2a2a44",
+};
 const C = {
-  pack: "#3a2010", packDk: "#2a1608", packStrap: "#5a3a20", packLabel: "#ffcc66",
-  glow: "#44aaff", circuit: "#ffaa44", node: "#ffdd44",
-  bubble: "#fffef5", bubbleBorder: "#3a2010", textDk: "#3a2010",
-  gold: "#ffdd57",
+  pack: "#15151f", packDk: "#0a0a12", packStrap: "#ff0080", packLabel: "#00ffff",
+  glow: "#00ffff", circuit: "#ff00ff", node: "#00ffff",
+  bubble: "#0f0f1e", bubbleBorder: "#ff00ff", textDk: "#00ffff",
+  gold: "#00ffff",
 };
 
 // ── Tiny 3x5 pixel font (digits, '.', 'M', 'B') ──────────────────────────────
@@ -168,12 +176,12 @@ const PLATS = [
   { x: 600, y: 220, w: 100, t: "g" },
 ];
 const GASSETS = [
-  { plat: 1, color: "#ffaa44", icon: "camera",  label: "IMAGE" },
-  { plat: 2, color: "#ff6644", icon: "film",    label: "VIDEO" },
-  { plat: 3, color: "#44ffaa", icon: "speaker", label: "SOUND" },
-  { plat: 4, color: "#ffaa44", icon: "photo",   label: "HI-RES" },
-  { plat: 5, color: "#ffdd44", icon: "circuit", label: "GPU" },
-  { plat: 6, color: "#44aaff", icon: "folder",  label: "STORAGE" },
+  { plat: 1, color: "#00ffff", icon: "camera",  label: "IMAGE" },
+  { plat: 2, color: "#ff0080", icon: "film",    label: "VIDEO" },
+  { plat: 3, color: "#39ff14", icon: "speaker", label: "SOUND" },
+  { plat: 4, color: "#00bfff", icon: "photo",   label: "HI-RES" },
+  { plat: 5, color: "#ff00ff", icon: "circuit", label: "GPU" },
+  { plat: 6, color: "#b026ff", icon: "folder",  label: "STORAGE" },
 ];
 GASSETS.forEach((a) => { const p = PLATS[a.plat]; a.wx = p.x + p.w / 2 - 8; a.wy = p.y - 18; });
 
@@ -196,16 +204,16 @@ function feetYAt(x) {
 //  SAMAD — clean blocky front character (coffee-shop style) with poses.
 // ═════════════════════════════════════════════════════════════════════════════
 const SK = {
-  skin: "#e8a878", skinSh: "#b8784a", skinHi: "#ffd8a8",
-  beard: "#3a2818", beardHi: "#5a3a28", beardDk: "#2a1810",
-  tank: "#1a1410", tankHi: "#2a2418",
-  pants: "#3a2a1a", pantsHi: "#4a3a2a", knee: "#2a1a0a", cuff: "#1a0a04",
-  shoe: "#0a0808", shoeHi: "#2a1818", sole: "#f0ebe2",
-  watch: "#3a8a8a", watchBand: "#1a1a1a", watchGlow: "#88e8e8",
-  brBlack: "#2a2a2a", brBlackHi: "#5a5a5a", brBrown: "#6a4a2a", brBrownHi: "#8a6a3a",
-  tattoo: "#1a3a4a",
-  pack: "#3a2010", packDk: "#2a1608", strap: "#5a3a20", strapHi: "#7a5230", label: "#ffcc66",
-  strain: "#ff6644",
+  skin: "#e0a888", skinSh: "#a86a52", skinHi: "#ffd4b0",
+  beard: "#241f33", beardHi: "#3a3252", beardDk: "#15121f",
+  tank: "#141420", tankHi: "#00ffff",
+  pants: "#181826", pantsHi: "#2a2a44", knee: "#101018", cuff: "#0a0a12",
+  shoe: "#0a0a12", shoeHi: "#ff0080", sole: "#00ffff",
+  watch: "#00ffff", watchBand: "#101018", watchGlow: "#aaffff",
+  brBlack: "#1a1a2a", brBlackHi: "#ff00ff", brBrown: "#ff0080", brBrownHi: "#ff66c0",
+  tattoo: "#00ffff",
+  pack: "#15151f", packDk: "#0a0a12", strap: "#ff0080", strapHi: "#ff66c0", label: "#00ffff",
+  strain: "#ff0040",
 };
 
 function drawSamad(ctx, ox, oy, u, pose, frame, opts) {
@@ -260,15 +268,17 @@ function drawSamad(ctx, ox, oy, u, pose, frame, opts) {
   }
   oy += bob;
 
-  // (0) backpack bulk behind body
+  // (0) backpack worn on the BACK — only its edges peek past the torso
   if (showPack) {
-    const bw = 4 + strain * 2;
-    r(1 - strain, 21, bw, 9, SK.pack);
-    r(1 - strain, 21, bw, 1, SK.packDk);
-    r(1 - strain, 29, bw, 1, SK.packDk);
-    r(2, 24, 2, 1, SK.label);
-    r(5, 19, 1, 15, SK.strap);
-    if (strain > 0.3) { r(0 - strain, 22, 1, 1, SK.strain); r(0 - strain, 26, 1, 1, SK.strain); r(5 + bw - 4, 23, 1, 1, SK.strain); }
+    const ext = strain * 2;
+    r(1 - ext, 20, 3 + ext, 13, SK.pack);
+    r(1 - ext, 20, 3 + ext, 1, SK.packDk);
+    r(1 - ext, 32, 3 + ext, 1, SK.packDk);
+    r(20, 20, 3 + ext, 13, SK.pack);
+    r(20, 20, 3 + ext, 1, SK.packDk);
+    r(20, 32, 3 + ext, 1, SK.packDk);
+    r(20, 24, 2, 3, SK.label);
+    if (strain > 0.3) { r(0 - ext, 24, 1, 1, SK.strain); r(22 + ext, 24, 1, 1, SK.strain); }
   }
 
   // (1) legs / pants / shoes
@@ -344,9 +354,10 @@ function drawSamad(ctx, ox, oy, u, pose, frame, opts) {
   r(12, 20, 2, 1, SK.skinSh);
   if (armMode === "stuff" && sf === 1) { r(9, 22, 1, 6, "#000"); r(15, 22, 1, 6, "#000"); } // flexed
   if (showPack) {
-    r(9, 19, 1, 14, SK.strap); r(16, 19, 1, 14, SK.strap); r(9, 19, 1, 14, SK.strapHi);
-    r(9, 28, 5, 3, SK.pack);
-    if (u >= 2) pixelText(ctx, ox + 9.4 * u, oy + 28.6 * u, "5MB", Math.max(1, Math.round(u * 0.6)), SK.label);
+    // only the shoulder straps cross the chest (the pack itself sits on his back)
+    r(9, 19, 1, 14, SK.strap); r(16, 19, 1, 14, SK.strap);
+    r(9, 19, 1, 14, SK.strapHi); r(16, 19, 1, 3, SK.strapHi);
+    r(9, 31, 2, 1, SK.strap); r(15, 31, 2, 1, SK.strap);   // strap buckles
   }
 
   // (4) head + beard
@@ -393,14 +404,47 @@ const CITY_FEET = 58 * CITY_S;
 const CITY_W = 24 * CITY_S;
 
 // ── Backgrounds ────────────────────────────────────────────────────────────────
-function drawSmallPack(ctx, x, y) {
-  drawRect(ctx, x + 3, y - 3, 2, 3, C.packStrap);
-  drawRect(ctx, x + 13, y - 3, 2, 3, C.packStrap);
-  drawRect(ctx, x, y, 18, 15, C.pack);
-  drawRect(ctx, x, y, 18, 2, C.packDk);
-  drawRect(ctx, x, y + 13, 18, 2, C.packDk);
-  drawRect(ctx, x + 3, y + 5, 12, 6, C.packLabel);
-  pixelText(ctx, x + 4, y + 6, "5MB", 2, C.textDk);
+// Laptop-style backpack (Frame 1 pickup) — tall rectangular body, handle, straps, front pocket.
+function drawSmallPack(ctx, x, y, sc) {
+  sc = sc == null ? 1.6 : sc;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(sc, sc);
+  const r = (gx, gy, w, h, c) => drawRect(ctx, gx, gy, w, h, c);
+
+  glowHalo(ctx, -2, -6, 36, 32, C.packStrap, 0.45);
+  // shoulder straps (behind bag)
+  r(5, -6, 4, 8, C.packStrap);
+  r(23, -6, 4, 8, C.packStrap);
+  r(6, -6, 2, 8, SK.strapHi);
+  r(24, -6, 2, 8, SK.strapHi);
+  // main body — portrait laptop-bag silhouette
+  r(0, 0, 32, 28, C.pack);
+  r(0, 0, 32, 2, C.packStrap);
+  r(0, 26, 32, 2, C.packDk);
+  r(0, 0, 2, 28, C.packDk);
+  r(30, 0, 2, 28, C.packDk);
+  // top carry handle
+  r(11, -4, 10, 4, C.packStrap);
+  r(12, -5, 8, 2, SK.strapHi);
+  r(13, -6, 6, 1, C.packStrap);
+  // front pocket + laptop sleeve line
+  r(3, 7, 26, 17, C.packDk);
+  r(4, 8, 24, 15, C.pack);
+  r(5, 9, 22, 1, SK.strapHi);
+  r(5, 18, 22, 1, NEON.cyan);
+  r(6, 19, 20, 1, "#0a0a12");
+  // 5MB badge on pocket
+  r(7, 11, 18, 9, C.packLabel);
+  pixelText(ctx, 8, 12, "5MB", 2, NEON.bg0);
+  // side compression straps
+  r(2, 10, 2, 12, C.packStrap);
+  r(28, 10, 2, 12, C.packStrap);
+  // bottom feet / base pad
+  r(4, 27, 6, 2, C.packDk);
+  r(22, 27, 6, 2, C.packDk);
+
+  ctx.restore();
 }
 
 function drawHeart(ctx, cx, cy, s, color, alpha) {
@@ -413,183 +457,318 @@ function drawHeart(ctx, cx, cy, s, color, alpha) {
 }
 
 function drawCoffeeShop(ctx, t) {
-  // warm wall + subtle dotted texture
-  drawRect(ctx, 0, 0, W, GROUND_Y, "#4a2c1a");
-  drawRect(ctx, 0, 0, W, 70, "#553320");
+  // dark neon bar wall + dotted texture
+  drawRect(ctx, 0, 0, W, GROUND_Y, NEON.bg0);
+  drawRect(ctx, 0, 0, W, 70, NEON.bg1);
   ctx.globalAlpha = 0.5;
   for (let y = 14; y < GROUND_Y - 6; y += 20)
-    for (let x = 12 + ((y / 20) % 2) * 14; x < W; x += 28) drawRect(ctx, x, y, 2, 2, "#3a2212");
+    for (let x = 12 + ((y / 20) % 2) * 14; x < W; x += 28) drawRect(ctx, x, y, 2, 2, "#20203a");
   ctx.globalAlpha = 1;
+  drawRect(ctx, 0, 66, W, 1, NEON.magenta); ctx.globalAlpha = 0.25; drawRect(ctx, 0, 64, W, 5, NEON.magenta); ctx.globalAlpha = 1;  // neon wall strip
 
-  // string lights across the top
+  // neon string lights across the top
   for (let x = -10; x < W; x += 4) {
     const sag = Math.sin((x + 40) * 0.018) * 6 + 8;
-    drawRect(ctx, x, sag, 2, 1, "#2a1a0e");
+    drawRect(ctx, x, sag, 2, 1, "#101020");
   }
   for (let i = 0, x = 16; x < W; x += 60, i++) {
     const sag = Math.sin((x + 40) * 0.018) * 6 + 10;
     const tw = 0.55 + Math.sin(t * 3 + i) * 0.45;
-    const col = ["#ffd27a", "#ff9a5a", "#ffe6a0", "#ffb070"][i % 4];
-    ctx.globalAlpha = tw; drawRect(ctx, x - 2, sag, 5, 5, col); ctx.globalAlpha = tw * 0.4; drawRect(ctx, x - 3, sag - 1, 7, 7, col); ctx.globalAlpha = 1;
-    drawRect(ctx, x, sag - 2, 1, 2, "#2a1a0e");
+    const col = [NEON.cyan, NEON.magenta, NEON.pink, NEON.purple][i % 4];
+    glowHalo(ctx, x - 2, sag, 5, 5, col, tw);
+    ctx.globalAlpha = tw; drawRect(ctx, x - 2, sag, 5, 5, col); ctx.globalAlpha = 1;
+    drawRect(ctx, x, sag - 2, 1, 2, "#101020");
   }
 
-  // window with sea + sun (left)
-  drawRect(ctx, 70, 50, 110, 96, "#2a1810");
-  drawRect(ctx, 74, 54, 102, 88, "#9fd0e8");
+  // window onto the neon megacity (left)
+  drawRect(ctx, 70, 50, 110, 96, "#05050f");
   const wg = ctx.createLinearGradient(0, 54, 0, 142);
-  wg.addColorStop(0, "#bfe2f0"); wg.addColorStop(0.5, "#dfeef2"); wg.addColorStop(0.55, "#6fa9c8"); wg.addColorStop(1, "#3f7ba0");
+  wg.addColorStop(0, "#1a0a2a"); wg.addColorStop(0.6, "#2a0a3a"); wg.addColorStop(1, "#3a0a40");
   ctx.fillStyle = wg; ctx.fillRect(74, 54, 102, 88);
-  drawRect(ctx, 142, 64, 16, 16, "#fdf3c8");                 // sun
-  ctx.globalAlpha = 0.4; drawRect(ctx, 139, 61, 22, 22, "#fdf3c8"); ctx.globalAlpha = 1;
-  for (let i = 0; i < 4; i++) { ctx.globalAlpha = 0.4; drawRect(ctx, 80 + i * 22, 112 + (i % 2) * 4, 14, 3, "#dfeef2"); ctx.globalAlpha = 1; }  // waves
-  drawRect(ctx, 86, 124, 18, 8, "#5a8a4a");                  // little island
-  drawRect(ctx, 122, 50, 4, 92, "#2a1810"); drawRect(ctx, 74, 96, 102, 4, "#2a1810");
+  // distant neon towers + window dots
+  for (let i = 0; i < 7; i++) {
+    const tx = 78 + i * 14, th = 20 + ((i * 37) % 40);
+    drawRect(ctx, tx, 142 - th, 9, th, NEON.buildingDk);
+    for (let wy = 142 - th + 3; wy < 138; wy += 5) drawRect(ctx, tx + 2, wy, 2, 2, (i % 2 ? NEON.cyan : NEON.pink));
+  }
+  glowHalo(ctx, 140, 62, 18, 18, NEON.magenta, 0.8);
+  drawRect(ctx, 140, 62, 18, 18, NEON.magenta); drawRect(ctx, 143, 65, 12, 12, NEON.pink);  // neon sun
+  for (let i = 0; i < 3; i++) drawRect(ctx, 138, 70 + i * 3, 22, 1, "#1a0a2a");              // scanlines
+  drawRect(ctx, 122, 50, 4, 92, "#101020"); drawRect(ctx, 74, 96, 102, 2, "#101020");
+  drawRect(ctx, 68, 48, 114, 2, NEON.cyan); ctx.globalAlpha = 0.3; drawRect(ctx, 68, 46, 114, 5, NEON.cyan); ctx.globalAlpha = 1;
 
-  // hanging lamp (center) with glow
-  drawRect(ctx, W / 2 - 1, 0, 2, 30, "#2a1a0e");
-  drawRect(ctx, W / 2 - 12, 30, 24, 18, "#3a2412");
-  drawRect(ctx, W / 2 - 9, 33, 18, 12, "#ffcf86");
-  drawRect(ctx, W / 2 - 5, 36, 10, 8, "#fff0c8");
-  ctx.globalAlpha = 0.16; drawRect(ctx, W / 2 - 26, 46, 52, 70, "#ffdd99"); ctx.globalAlpha = 1;
+  // hanging neon lamp (center)
+  drawRect(ctx, W / 2 - 1, 0, 2, 30, "#101020");
+  drawRect(ctx, W / 2 - 12, 30, 24, 18, NEON.bg1);
+  glowHalo(ctx, W / 2 - 9, 33, 18, 12, NEON.cyan, 1);
+  drawRect(ctx, W / 2 - 9, 33, 18, 12, NEON.cyan); drawRect(ctx, W / 2 - 5, 36, 10, 8, "#aaffff");
+  ctx.globalAlpha = 0.12; drawRect(ctx, W / 2 - 26, 46, 52, 80, NEON.cyan); ctx.globalAlpha = 1;
 
-  // chalkboard with a pipeline diagram (right)
+  // holographic screen with pipeline diagram (right)
   const bx = 300, by = 56, bw = 150, bh = 78;
-  drawRect(ctx, bx - 4, by - 4, bw + 8, bh + 8, "#3a2412");
-  drawRect(ctx, bx, by, bw, bh, "#1d3a2c");
-  ctx.globalAlpha = 0.18; for (let y = by + 8; y < by + bh; y += 9) drawRect(ctx, bx + 4, y, bw - 8, 1, "#8fc0a8"); ctx.globalAlpha = 1;
+  drawRect(ctx, bx - 4, by - 4, bw + 8, bh + 8, NEON.bg1);
+  drawRect(ctx, bx - 4, by - 4, bw + 8, 2, NEON.magenta);
+  drawRect(ctx, bx, by, bw, bh, "#0a0a1a");
+  ctx.globalAlpha = 0.18; for (let y = by + 8; y < by + bh; y += 9) drawRect(ctx, bx + 4, y, bw - 8, 1, NEON.cyan); ctx.globalAlpha = 1;
   const boxes = [{ x: 18, y: 26, w: 26, h: 16 }, { x: 58, y: 22, w: 34, h: 22 }, { x: 106, y: 26, w: 28, h: 16 }];
   boxes.forEach((b, i) => {
-    drawRect(ctx, bx + b.x, by + b.y, b.w, b.h, "#214a36");
-    drawRect(ctx, bx + b.x, by + b.y, b.w, b.h, ["#8fc0a8", "#cfe9da", "#8fc0a8"][i]);
-    drawRect(ctx, bx + b.x + 2, by + b.y + 2, b.w - 4, b.h - 4, "#1d3a2c");
+    const col = [NEON.cyan, NEON.magenta, NEON.green][i];
+    glowHalo(ctx, bx + b.x, by + b.y, b.w, b.h, col, 0.6);
+    drawRect(ctx, bx + b.x, by + b.y, b.w, b.h, col);
+    drawRect(ctx, bx + b.x + 2, by + b.y + 2, b.w - 4, b.h - 4, "#0a0a1a");
   });
-  drawRect(ctx, bx + 44, by + 33, 14, 2, "#cfe9da"); drawRect(ctx, bx + 56, by + 31, 2, 2, "#cfe9da"); drawRect(ctx, bx + 56, by + 35, 2, 2, "#cfe9da");
-  drawRect(ctx, bx + 92, by + 33, 14, 2, "#cfe9da"); drawRect(ctx, bx + 104, by + 31, 2, 2, "#cfe9da"); drawRect(ctx, bx + 104, by + 35, 2, 2, "#cfe9da");
-  for (let i = 0; i < 3; i++) drawRect(ctx, bx + 70 + i * 6, by + 52, 3, 3, "#cfe9da");
+  drawRect(ctx, bx + 44, by + 33, 14, 2, NEON.cyan); drawRect(ctx, bx + 56, by + 31, 2, 2, NEON.cyan); drawRect(ctx, bx + 56, by + 35, 2, 2, NEON.cyan);
+  drawRect(ctx, bx + 92, by + 33, 14, 2, NEON.cyan); drawRect(ctx, bx + 104, by + 31, 2, 2, NEON.cyan); drawRect(ctx, bx + 104, by + 35, 2, 2, NEON.cyan);
+  for (let i = 0; i < 3; i++) drawRect(ctx, bx + 70 + i * 6, by + 52, 3, 3, NEON.green);
 
-  // floor (wooden planks)
-  drawRect(ctx, 0, GROUND_Y, W, H - GROUND_Y, "#7a4f2c");
-  drawRect(ctx, 0, GROUND_Y, W, 3, "#9a6a3a");
-  for (let x = 0; x < W; x += 30) drawRect(ctx, x, GROUND_Y, 1, H - GROUND_Y, "#5a3a20");
-  for (let y = GROUND_Y + 12; y < H; y += 14) { ctx.globalAlpha = 0.4; drawRect(ctx, 0, y, W, 1, "#5a3a20"); ctx.globalAlpha = 1; }
+  // floor + synthwave neon grid
+  drawRect(ctx, 0, GROUND_Y, W, H - GROUND_Y, "#0a0a16");
+  drawRect(ctx, 0, GROUND_Y, W, 2, NEON.magenta); ctx.globalAlpha = 0.3; drawRect(ctx, 0, GROUND_Y - 1, W, 4, NEON.magenta); ctx.globalAlpha = 1;
+  ctx.globalAlpha = 0.35;
+  for (let x = -2; x <= W; x += 40) { const conv = (x - W / 2); for (let yy = GROUND_Y; yy < H; yy += 2) { const f = (yy - GROUND_Y) / (H - GROUND_Y); drawRect(ctx, W / 2 + conv * (1 + f * 1.6), yy, 1, 2, NEON.cyan); } }
+  for (let i = 1; i < 6; i++) { const yy = GROUND_Y + Math.pow(i / 6, 1.8) * (H - GROUND_Y); drawRect(ctx, 0, yy, W, 1, NEON.cyan); }
+  ctx.globalAlpha = 1;
 
-  // small table + cup (left foreground)
-  drawRect(ctx, 60, 188, 56, 6, "#5a3a20"); drawRect(ctx, 60, 188, 56, 2, "#7a5230");
-  drawRect(ctx, 66, 194, 4, 18, "#4a2e18"); drawRect(ctx, 106, 194, 4, 18, "#4a2e18");
-  drawRect(ctx, 80, 180, 10, 8, "#efe9dd"); drawRect(ctx, 81, 181, 8, 2, "#4a2a14"); drawRect(ctx, 90, 182, 2, 3, "#c8c0b0");
-  ctx.globalAlpha = 0.5; drawRect(ctx, 84, 176, 1, 4, "#cfc7b6"); ctx.globalAlpha = 1;   // steam
+  // small table + neon cup (left foreground)
+  drawRect(ctx, 60, 188, 56, 6, NEON.bg1); drawRect(ctx, 60, 188, 56, 2, NEON.cyan);
+  drawRect(ctx, 66, 194, 4, 18, "#101020"); drawRect(ctx, 106, 194, 4, 18, "#101020");
+  drawRect(ctx, 80, 180, 10, 8, "#15151f"); drawRect(ctx, 81, 181, 8, 2, NEON.pink); drawRect(ctx, 90, 182, 2, 3, NEON.cyan);
+  ctx.globalAlpha = 0.5; drawRect(ctx, 84, 176, 1, 4, NEON.cyan); ctx.globalAlpha = 1;   // steam
 
   // stool (right foreground)
-  drawRect(ctx, 410, 184, 22, 5, "#5a3a20"); drawRect(ctx, 414, 189, 3, 23, "#4a2e18"); drawRect(ctx, 425, 189, 3, 23, "#4a2e18");
+  drawRect(ctx, 410, 184, 22, 5, NEON.bg1); drawRect(ctx, 410, 184, 22, 2, NEON.magenta);
+  drawRect(ctx, 414, 189, 3, 23, "#101020"); drawRect(ctx, 425, 189, 3, 23, "#101020");
 }
 
 function drawRoom(ctx, t, withDoor) {
-  drawRect(ctx, 0, 0, W, GROUND_Y, "#6a4632");
-  drawRect(ctx, 0, 0, W, 64, "#5e3d2a");
-  drawRect(ctx, 0, GROUND_Y - 4, W, 4, "#4a2e1c");
-  drawRect(ctx, 0, GROUND_Y, W, H - GROUND_Y, "#8a6040");
-  for (let x = 0; x < W; x += 26) drawRect(ctx, x, GROUND_Y, 1, H - GROUND_Y, "#6a4528");
-  for (let y = GROUND_Y + 8; y < H; y += 10) { ctx.globalAlpha = 0.4; drawRect(ctx, 0, y, W, 1, "#6a4528"); ctx.globalAlpha = 1; }
-  // window + light
-  drawRect(ctx, 34, 46, 74, 70, "#3a2418");
-  drawRect(ctx, 38, 50, 66, 62, "#bcd8ee");
-  drawRect(ctx, 38, 86, 66, 26, "#ffe2ad");
-  drawRect(ctx, 86, 56, 10, 10, "#fff6d8");
-  drawRect(ctx, 68, 50, 2, 62, "#3a2418"); drawRect(ctx, 38, 80, 66, 2, "#3a2418");
-  ctx.globalAlpha = 0.1; drawRect(ctx, 60, GROUND_Y, 120, 6, "#fff2c8"); drawRect(ctx, 80, GROUND_Y + 6, 90, 8, "#fff2c8"); ctx.globalAlpha = 1;
-  // faded furniture silhouettes
-  ctx.globalAlpha = 0.35;
-  drawRect(ctx, 150, 150, 40, 62, "#3a2418"); drawRect(ctx, 150, 150, 40, 4, "#2a1810");
+  drawRect(ctx, 0, 0, W, GROUND_Y, NEON.bg0);
+  drawRect(ctx, 0, 0, W, 64, NEON.bg1);
+  drawRect(ctx, 0, GROUND_Y - 4, W, 4, "#06060f");
+  // neon wall trim
+  drawRect(ctx, 0, 62, W, 1, NEON.cyan); ctx.globalAlpha = 0.25; drawRect(ctx, 0, 60, W, 5, NEON.cyan); ctx.globalAlpha = 1;
+  // synthwave neon grid floor
+  drawRect(ctx, 0, GROUND_Y, W, H - GROUND_Y, "#0a0a16");
+  drawRect(ctx, 0, GROUND_Y, W, 2, NEON.magenta); ctx.globalAlpha = 0.3; drawRect(ctx, 0, GROUND_Y - 1, W, 4, NEON.magenta); ctx.globalAlpha = 1;
+  ctx.globalAlpha = 0.3;
+  for (let x = -2; x <= W; x += 44) { const conv = (x - W / 2); for (let yy = GROUND_Y; yy < H; yy += 2) { const f = (yy - GROUND_Y) / (H - GROUND_Y); drawRect(ctx, W / 2 + conv * (1 + f * 1.6), yy, 1, 2, NEON.cyan); } }
+  for (let i = 1; i < 6; i++) { const yy = GROUND_Y + Math.pow(i / 6, 1.8) * (H - GROUND_Y); drawRect(ctx, 0, yy, W, 1, NEON.cyan); }
   ctx.globalAlpha = 1;
+  // window onto the neon skyline
+  drawRect(ctx, 34, 46, 74, 70, "#05050f");
+  drawRect(ctx, 38, 50, 66, 62, "#160a26");
+  for (let i = 0; i < 5; i++) { const tx = 41 + i * 13, th = 16 + ((i * 29) % 34); drawRect(ctx, tx, 112 - th, 9, th, NEON.buildingDk); for (let wy = 112 - th + 3; wy < 108; wy += 5) drawRect(ctx, tx + 2, wy, 2, 2, (i % 2 ? NEON.cyan : NEON.magenta)); }
+  drawRect(ctx, 86, 56, 8, 8, NEON.pink); ctx.globalAlpha = 0.5; drawRect(ctx, 84, 54, 12, 12, NEON.pink); ctx.globalAlpha = 1;
+  drawRect(ctx, 68, 50, 2, 62, "#101020"); drawRect(ctx, 38, 80, 66, 2, "#101020");
+  drawRect(ctx, 32, 44, 78, 2, NEON.cyan); ctx.globalAlpha = 0.3; drawRect(ctx, 32, 42, 78, 5, NEON.cyan); ctx.globalAlpha = 1;
+  // furniture silhouette with neon edge
+  drawRect(ctx, 150, 150, 40, 62, "#12121f"); drawRect(ctx, 150, 150, 40, 2, NEON.magenta);
   if (withDoor) {
     const dx = 384, dy = 60, dw = 64;
-    drawRect(ctx, dx - 6, dy - 6, dw + 12, GROUND_Y - dy + 6, "#2a1810");
-    drawRect(ctx, dx, dy, dw, GROUND_Y - dy, "#2a1a0a");
+    drawRect(ctx, dx - 6, dy - 6, dw + 12, GROUND_Y - dy + 6, "#101020");
+    drawRect(ctx, dx, dy, dw, GROUND_Y - dy, "#06060f");
     const pulse = 0.55 + Math.sin(t * 2) * 0.25;
-    ctx.globalAlpha = pulse * 0.5; drawRect(ctx, dx + dw / 2 - 12, 150, 24, 50, "#ffdd99");
-    ctx.globalAlpha = pulse; drawRect(ctx, dx + dw / 2 - 5, 158, 10, 34, "#ffe9bb"); ctx.globalAlpha = 1;
-    drawRect(ctx, dx, GROUND_Y - 3, dw, 3, "#4a3320");
+    // neon portal frame
+    drawRect(ctx, dx - 2, dy - 2, dw + 4, 2, NEON.cyan); drawRect(ctx, dx - 2, dy - 2, 2, GROUND_Y - dy + 2, NEON.cyan); drawRect(ctx, dx + dw, dy - 2, 2, GROUND_Y - dy + 2, NEON.magenta);
+    ctx.globalAlpha = pulse * 0.45; drawRect(ctx, dx + dw / 2 - 14, dy + 6, 28, GROUND_Y - dy - 6, NEON.cyan);
+    ctx.globalAlpha = pulse; drawRect(ctx, dx + dw / 2 - 5, dy + 12, 10, GROUND_Y - dy - 14, "#aaffff"); ctx.globalAlpha = 1;
+    drawRect(ctx, dx, GROUND_Y - 3, dw, 3, NEON.magenta);
   }
 }
 
 function drawSignalTower(ctx, x, baseY, h, t) {
-  drawRect(ctx, x, baseY - h, 4, h, "#808080");
-  drawRect(ctx, x + 1, baseY - h, 1, h, "#9a9a9a");
-  for (let i = 0; i < 4; i++) drawRect(ctx, x - 2, baseY - h + 10 + i * Math.floor(h / 5), 8, 1, "#606060"); // cross-bracing
+  drawRect(ctx, x, baseY - h, 4, h, NEON.building);
+  drawRect(ctx, x + 1, baseY - h, 1, h, NEON.cyan);   // neon edge
+  for (let i = 0; i < 4; i++) drawRect(ctx, x - 2, baseY - h + 10 + i * Math.floor(h / 5), 8, 1, NEON.line); // cross-bracing
   const topY = baseY - h;
-  drawRect(ctx, x - 6, topY, 16, 1, "#808080");   // antenna arm
+  drawRect(ctx, x - 6, topY, 16, 1, NEON.building);   // antenna arm
   const pulse = 0.3 + (Math.sin(t * (2 * Math.PI / 1.5)) * 0.5 + 0.5) * 0.5;
+  const ring = (t * 0.7) % 1 < 0.5 ? NEON.cyan : NEON.magenta;
   for (let i = 0; i < 3; i++) {
-    ctx.globalAlpha = clamp(pulse - i * 0.12, 0, 1);
-    const rw = 6 + i * 5;
-    drawRect(ctx, x + 2 - rw / 2, topY - 5 - i * 3, rw, 1, "#ff6644");
+    ctx.globalAlpha = clamp(pulse - i * 0.1, 0, 1);
+    const rw = 6 + i * 6;
+    drawRect(ctx, x + 2 - rw / 2, topY - 5 - i * 3, rw, 1, ring);
+    drawRect(ctx, x + 2 - rw / 2, topY - 5 - i * 3, 1, 2, ring);
+    drawRect(ctx, x + 2 + rw / 2 - 1, topY - 5 - i * 3, 1, 2, ring);
   }
   ctx.globalAlpha = 1;
+  drawRect(ctx, x + 1, topY, 2, 2, NEON.pink);   // blinking beacon
 }
-function drawBillboard(ctx, x, y, bg, text, groundY) {
-  const w = 56, h = 24;
-  // support pole down to the ground plane
-  drawRect(ctx, x + w / 2 - 2, y + h, 4, groundY - (y + h), "#4a3320");
-  drawRect(ctx, x + w / 2 - 1, y + h, 1, groundY - (y + h), "#6a4a30");
-  drawRect(ctx, x + w / 2 - 4, groundY - 2, 8, 2, "#3a2410");
-  ctx.globalAlpha = 0.4; drawRect(ctx, x + 3, y + 3, w, h, "#2a1a0a"); ctx.globalAlpha = 1; // shadow
-  drawRect(ctx, x - 2, y - 2, w + 4, h + 4, "#5a3a18");      // wood frame
-  drawRect(ctx, x, y, w, h, bg);
-  drawRect(ctx, x, y + h - 2, w, 2, "#2a1a0a");              // bottom edge
-  ctx.fillStyle = "#ffffff";
-  ctx.font = '6px "Press Start 2P", monospace';
-  ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  ctx.fillText(text, x + w / 2, y + h / 2);
+// TikTok logo — loads your pixel-art reference; pixel fallback if image not ready yet.
+const TIKTOK_LOGO = { img: null, ready: false, failed: false };
+(function loadTikTokLogo() {
+  const img = new Image();
+  img.onload = () => { TIKTOK_LOGO.img = img; TIKTOK_LOGO.ready = true; };
+  img.onerror = () => { TIKTOK_LOGO.failed = true; };
+  img.src = "assets/tiktok-logo.png";
+})();
+
+function drawTikTokLogoPixelFallback(ctx, ox, oy, ps) {
+  const NOTE = [
+    "......####..............",
+    ".....######.............",
+    "....########............",
+    "...#########............",
+    "...####..####...........",
+    "...###....###...........",
+    "...###.....##...........",
+    "...###......#...........",
+    "...###..................",
+    "...###..................",
+    "...###..................",
+    "....##..................",
+    "....##..................",
+    "...#....................",
+    "...##...................",
+    "....###.................",
+    ".....####...............",
+    "......#####.............",
+    ".......#####............",
+    "........####............",
+  ];
+  const layers = [
+    { dx: -1, dy: -1, c: "#25F4EE" },
+    { dx: 1, dy: 1, c: "#FE2C55" },
+    { dx: 0, dy: 0, c: "#ffffff" },
+  ];
+  for (const L of layers) {
+    for (let r = 0; r < NOTE.length; r++)
+      for (let c = 0; c < NOTE[r].length; c++)
+        if (NOTE[r][c] === "#")
+          drawRect(ctx, ox + (c + L.dx) * ps, oy + (r + L.dy) * ps, ps, ps, L.c);
+  }
+}
+
+function getTikTokBoardSize() {
+  const pad = 4;
+  const logoH = 32;   // display height in the scene (width follows asset aspect)
+  const iw = (TIKTOK_LOGO.ready && TIKTOK_LOGO.img) ? TIKTOK_LOGO.img.width : 800;
+  const ih = (TIKTOK_LOGO.ready && TIKTOK_LOGO.img) ? TIKTOK_LOGO.img.height : 840;
+  const logoW = Math.round(iw * (logoH / ih));
+  return { w: logoW + pad * 2, h: logoH + pad * 2, pad, logoW, logoH };
+}
+
+function drawTikTokLogo(ctx, ix, iy, logoW, logoH) {
+  if (TIKTOK_LOGO.ready && TIKTOK_LOGO.img) {
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(TIKTOK_LOGO.img, ix, iy, logoW, logoH);
+    return;
+  }
+  const ps = Math.max(1, Math.round(Math.min(logoW / 22, logoH / 20)));
+  drawTikTokLogoPixelFallback(ctx, ix, iy, ps);
+}
+
+function drawBillboard(ctx, x, y, bg, text, groundY, letterColors, outline, logo) {
+  const fontPx = 6;
+  let w, h;
+  let tiktokInner;
+  if (logo === "tiktok") {
+    tiktokInner = getTikTokBoardSize();
+    w = tiktokInner.w;
+    h = tiktokInner.h;
+  } else {
+    ctx.font = fontPx + 'px "Press Start 2P", monospace';
+    w = Math.max(56, Math.ceil(ctx.measureText(text).width) + 16);
+    h = 24;
+  }
+  const border = outline || bg;
+  // dark support pole down to the ground plane
+  drawRect(ctx, x + w / 2 - 2, y + h, 4, groundY - (y + h), "#101020");
+  drawRect(ctx, x + w / 2 - 1, y + h, 1, groundY - (y + h), NEON.cyanDk);
+  drawRect(ctx, x + w / 2 - 4, groundY - 2, 8, 2, "#0a0a14");
+  glowHalo(ctx, x, y, w, h, bg, 0.7);                       // neon glow
+  drawRect(ctx, x - 2, y - 2, w + 4, h + 4, NEON.bg1);      // dark frame
+  if (outline) {
+    drawRect(ctx, x - 2, y - 2, w + 4, 2, border);          // top
+    drawRect(ctx, x - 2, y + h, w + 4, 2, border);          // bottom
+    drawRect(ctx, x - 2, y - 2, 2, h + 4, border);          // left
+    drawRect(ctx, x + w, y - 2, 2, h + 4, border);          // right
+  } else {
+    drawRect(ctx, x - 2, y - 2, w + 4, 1, border); drawRect(ctx, x - 2, y + h + 1, w + 4, 1, border);
+  }
+  drawRect(ctx, x, y, w, h, logo === "tiktok" ? "#000000" : "#0a0a16");   // TikTok: black face
+  if (logo === "tiktok") {
+    drawTikTokLogo(ctx, x + tiktokInner.pad, y + tiktokInner.pad, tiktokInner.logoW, tiktokInner.logoH);
+    ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    return;
+  }
+  ctx.font = fontPx + 'px "Press Start 2P", monospace';
+  ctx.textBaseline = "middle";
+  if (letterColors && letterColors.length === text.length) {
+    let cx = x + w / 2 - ctx.measureText(text).width / 2;
+    const ty = y + h / 2;
+    ctx.textAlign = "left";
+    for (let i = 0; i < text.length; i++) {
+      ctx.fillStyle = letterColors[i];
+      ctx.fillText(text[i], cx, ty);
+      cx += ctx.measureText(text[i]).width;
+    }
+  } else {
+    ctx.fillStyle = bg;
+    ctx.textAlign = "center";
+    ctx.fillText(text, x + w / 2, y + h / 2);
+  }
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
 }
 
 // Mid-layer fixtures (world x). Parallax 0.5, planted on the ground plane.
 const TOWERS = [{ x: 40, h: 64 }, { x: 250, h: 74 }, { x: 460, h: 60 }, { x: 660, h: 70 }];
+// Google logo letter colors: G blue, o red, o yellow, g blue, l green, e red
+const GOOGLE_LETTERS = ["#4285F4", "#EA4335", "#FBBC05", "#4285F4", "#34A853", "#EA4335"];
 const BILLBOARDS = [
-  { x: 130, y: 92,  bg: "#ff6644", t: "PLAYABLE" },
-  { x: 330, y: 78,  bg: "#44aaff", t: "GAME" },
-  { x: 540, y: 96,  bg: "#44ffaa", t: "ASSETS" },
-  { x: 740, y: 82,  bg: "#ffaa44", t: "COLLECT" },
+  { x: 130, y: 92,  bg: NEON.pink,    t: "PLAYABLE" },
+  { x: 200, y: 84,  bg: NEON.blue,    t: "META", outline: "#ffffff" },
+  { x: 330, y: 78,  bg: NEON.cyan,    t: "GAME" },
+  { x: 420, y: 72,  bg: "#ffffff",    t: "GOOGLE", letters: GOOGLE_LETTERS },
+  { x: 540, y: 96,  bg: NEON.green,   t: "ASSETS" },
+  { x: 620, y: 86,  bg: NEON.pink,    t: "", logo: "tiktok" },
+  { x: 740, y: 82,  bg: NEON.magenta, t: "COLLECT" },
 ];
 
 function drawCity(ctx, camX, t) {
-  // Layer 1 — far sky (gradient to a hazy horizon)
+  // Layer 1 — far neon sky (dark gradient + synthwave sun)
   const g = ctx.createLinearGradient(0, 0, 0, CITY_FLOOR + 10);
-  g.addColorStop(0, "#87ceeb"); g.addColorStop(0.65, "#b8c6c2"); g.addColorStop(1, "#d8c8ac");
+  g.addColorStop(0, "#0a0a1a"); g.addColorStop(0.55, "#1a0a2e"); g.addColorStop(1, "#3a0a3a");
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // synthwave sun on the horizon (fixed, far)
+  const sunX = W * 0.72, sunY = CITY_FLOOR - 70;
+  glowHalo(ctx, sunX - 24, sunY - 24, 48, 48, NEON.pink, 0.8);
+  const sg = ctx.createLinearGradient(0, sunY - 24, 0, sunY + 24);
+  sg.addColorStop(0, "#ffd23f"); sg.addColorStop(0.5, NEON.pink); sg.addColorStop(1, NEON.magenta);
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(sunX, sunY, 24, 0, Math.PI * 2); ctx.fill();
+  for (let i = 0; i < 6; i++) drawRect(ctx, sunX - 26, sunY + i * 4, 52, 2, "#1a0a2e");   // scanlines
 
-  // Layer 1b — distant skyline (parallax 0.3): evenly spaced, hazy, on the horizon
+  // Layer 1b — distant neon skyline (parallax 0.3)
   const sx3 = camX * 0.3, span = 56;
-  ctx.globalAlpha = 0.4;
   const start = Math.floor(sx3 / span) - 1;
   for (let i = start; i < start + W / span + 3; i++) {
     const bx = i * span - sx3;
     const h = 34 + Math.abs(Math.sin(i * 1.7)) * 44;
     const bw = 40 + Math.abs(Math.cos(i * 2.1)) * 8;
-    drawRect(ctx, bx, CITY_FLOOR - h, bw, h, "#7e8a90");
-    drawRect(ctx, bx, CITY_FLOOR - h, bw, 2, "#9aa6ac");
+    drawRect(ctx, bx, CITY_FLOOR - h, bw, h, NEON.buildingDk);
+    drawRect(ctx, bx, CITY_FLOOR - h, bw, 1, (i % 2 ? NEON.cyan : NEON.magenta));   // neon rooftop
     for (let wy = CITY_FLOOR - h + 6; wy < CITY_FLOOR - 6; wy += 9)
-      for (let wx = bx + 5; wx < bx + bw - 4; wx += 9) drawRect(ctx, wx, wy, 3, 4, "#5a666c");
+      for (let wx = bx + 5; wx < bx + bw - 4; wx += 9) { ctx.globalAlpha = 0.7; drawRect(ctx, wx, wy, 2, 3, (((i + wx) % 3) ? NEON.cyan : NEON.pink)); ctx.globalAlpha = 1; }
   }
+
+  // Ground plane + synthwave neon grid
+  drawRect(ctx, 0, CITY_FLOOR, W, H - CITY_FLOOR, "#0a0a16");
+  glowHalo(ctx, 0, CITY_FLOOR, W, 1, NEON.cyan, 0.8);
+  drawRect(ctx, 0, CITY_FLOOR, W, 2, NEON.cyan);
+  ctx.globalAlpha = 0.35;
+  const tile = 40, tx = -((((camX) % tile) + tile) % tile);
+  for (let i = -2; i < W / tile + 3; i++) { const gx = tx + i * tile; for (let yy = CITY_FLOOR; yy < H; yy += 2) { const f = (yy - CITY_FLOOR) / (H - CITY_FLOOR); drawRect(ctx, W / 2 + (gx - W / 2) * (1 + f * 1.8), yy, 1, 2, NEON.magenta); } }
+  for (let i = 1; i < 6; i++) { const yy = CITY_FLOOR + Math.pow(i / 6, 1.8) * (H - CITY_FLOOR); drawRect(ctx, 0, yy, W, 1, NEON.cyan); }
   ctx.globalAlpha = 1;
 
-  // Ground plane (the floor everything stands on)
-  const gp = ctx.createLinearGradient(0, CITY_FLOOR, 0, H);
-  gp.addColorStop(0, "#9a6a3a"); gp.addColorStop(0.28, "#6a4520"); gp.addColorStop(1, "#3a2410");
-  ctx.fillStyle = gp; ctx.fillRect(0, CITY_FLOOR, W, H - CITY_FLOOR);
-  drawRect(ctx, 0, CITY_FLOOR, W, 2, "#b88a52");            // lit ground edge
-  const tile = 18, tx = -((((camX) % tile) + tile) % tile);
-  ctx.globalAlpha = 0.5;
-  for (let i = -1; i < W / tile + 2; i++) drawRect(ctx, tx + i * tile, CITY_FLOOR + 4, 1, H - CITY_FLOOR, "#2a1808");
-  ctx.globalAlpha = 1;
-
-  // Layer 2 — towers & billboards (parallax 0.5), planted on the ground plane
+  // Layer 2 — towers & billboards (parallax 0.5)
   const mx = camX * 0.5;
   for (const tw of TOWERS) { const sx = tw.x - mx; if (sx > -20 && sx < W + 20) drawSignalTower(ctx, sx, CITY_FLOOR, tw.h, t); }
-  for (const bb of BILLBOARDS) { const sx = bb.x - mx; if (sx > -70 && sx < W + 20) drawBillboard(ctx, sx, bb.y, bb.bg, bb.t, CITY_FLOOR); }
+  for (const bb of BILLBOARDS) {
+    const sx = bb.x - mx;
+    if (sx > -70 && sx < W + 20) drawBillboard(ctx, sx, bb.y, bb.bg, bb.t, CITY_FLOOR, bb.letters, bb.outline, bb.logo);
+  }
 
-  // Layer 3 — platforms (parallax 1.0), raised above the ground plane
+  // Layer 3 — neon platforms (parallax 1.0)
   for (let pi = 0; pi < PLATS.length; pi++) {
     const p = PLATS[pi];
     let sx = p.x - camX;
@@ -597,25 +776,30 @@ function drawCity(ctx, camX, t) {
     if (p.t === "f") sy += Math.sin(t * 2 + pi) * 2;        // floating bob
     if (sx + p.w < -10 || sx > W + 10) continue;
     if (p.t === "g") {
-      drawRect(ctx, sx, sy + 8, p.w, CITY_FLOOR - sy - 4, "#4a2a10");  // support pillar to ground
-      drawRect(ctx, sx, sy + 8, 2, CITY_FLOOR - sy - 4, "#5a3a1c");
-      drawRect(ctx, sx, sy, p.w, 8, "#5a3a18");
-      drawRect(ctx, sx, sy, p.w, 2, "#7a5a38");
-      drawRect(ctx, sx, sy + 7, p.w, 1, "#2a1a0a");
+      drawRect(ctx, sx, sy + 8, p.w, CITY_FLOOR - sy - 4, NEON.bg1);   // support pillar
+      drawRect(ctx, sx, sy + 8, 1, CITY_FLOOR - sy - 4, NEON.cyanDk);
+      drawRect(ctx, sx, sy, p.w, 8, "#15151f");
+      glowHalo(ctx, sx, sy, p.w, 2, NEON.cyan, 0.6);
+      drawRect(ctx, sx, sy, p.w, 2, NEON.cyan);
+      drawRect(ctx, sx, sy + 7, p.w, 1, "#06060f");
     } else {
       ctx.globalAlpha = 0.25; drawRect(ctx, sx + 3, sy + 9, p.w, 2, "#000"); ctx.globalAlpha = 1;
-      drawRect(ctx, sx, sy, p.w, 6, "#4a6a8a");
-      drawRect(ctx, sx, sy, p.w, 2, "#6a8aaa");
-      drawRect(ctx, sx, sy + 5, p.w, 1, "#2a3a4a");
+      drawRect(ctx, sx, sy, p.w, 6, "#15151f");
+      glowHalo(ctx, sx, sy, p.w, 2, NEON.magenta, 0.6);
+      drawRect(ctx, sx, sy, p.w, 2, NEON.magenta);
+      drawRect(ctx, sx, sy + 5, p.w, 1, "#06060f");
     }
   }
 }
 
 function drawCounter(ctx, n) {
-  ctx.fillStyle = C.gold;
   ctx.font = '8px "Press Start 2P", monospace';
   ctx.textAlign = "right"; ctx.textBaseline = "top";
+  ctx.save();
+  ctx.shadowColor = NEON.cyan; ctx.shadowBlur = 8;
+  ctx.fillStyle = NEON.cyan;
   ctx.fillText("COLLECTED:" + n, W - 8, 8);
+  ctx.restore();
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
 }
 
@@ -635,11 +819,49 @@ function speechBubble(ctx, anchorX, anchorY, lf, line) {
   }
   ctx.save();
   ctx.translate(bx + bw / 2, by + bh / 2); ctx.scale(grow, grow); ctx.translate(-(bx + bw / 2), -(by + bh / 2));
+  glowHalo(ctx, bx - 2, by - 2, bw + 4, bh + 4, C.bubbleBorder, 0.9);
   drawRect(ctx, bx - 2, by - 2, bw + 4, bh + 4, C.bubbleBorder);
   drawRect(ctx, bx, by, bw, bh, C.bubble);
+  ctx.shadowColor = C.textDk; ctx.shadowBlur = 6;
   ctx.fillStyle = C.textDk; ctx.font = fontPx + 'px "Press Start 2P", monospace';
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.fillText(line, bx + bw / 2, by + bh / 2);
+  ctx.shadowBlur = 0;
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  ctx.restore();
+}
+
+// Flashing "no-entry" capacity warning that blocks the backpack during the chaos.
+function restrictionSign(ctx, cx, cy, lf, appear) {
+  const pop = easeOutBack(clamp(appear / 5, 0, 1));
+  const blink = 0.55 + 0.45 * Math.sin(lf * 0.5);
+  const r = 22 * pop;
+  ctx.save();
+  ctx.globalAlpha = clamp(blink, 0, 1);
+  ctx.lineCap = "round";
+  ctx.shadowColor = "#ff0040"; ctx.shadowBlur = 14;
+  ctx.strokeStyle = "#ff0040"; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();        // ring
+  const d = r * 0.72;
+  ctx.beginPath(); ctx.moveTo(cx - d, cy - d); ctx.lineTo(cx + d, cy + d); ctx.stroke();  // slash
+  ctx.shadowBlur = 0; ctx.strokeStyle = "#ff99b3"; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();        // inner highlight
+  ctx.restore();
+
+  // text banner under the sign
+  ctx.save();
+  ctx.globalAlpha = clamp(blink, 0, 1) * pop;
+  const label = "5MB MAX";
+  ctx.font = '8px "Press Start 2P", monospace';
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  const tw = Math.ceil(ctx.measureText(label).width) + 12, ty = cy + 22 + 8;
+  drawRect(ctx, cx - tw / 2, ty, tw, 15, "#0a0a16");
+  drawRect(ctx, cx - tw / 2, ty, tw, 1, "#ff0040");
+  drawRect(ctx, cx - tw / 2, ty + 14, tw, 1, "#ff0040");
+  ctx.shadowColor = "#ff0040"; ctx.shadowBlur = 6;
+  ctx.fillStyle = "#ff3366";
+  ctx.fillText(label, cx, ty + 8);
+  ctx.shadowBlur = 0;
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
   ctx.restore();
 }
@@ -669,24 +891,33 @@ function drawTinyBackpack(ctx, frame) {
       drawSamad(ctx, SAMAD_CENTER_X, SAMAD_TOP, SAMAD_S, "idle", frame, { showPack: false });
       if (frame < 6) whiteFlash(ctx, 1 - frame / 6);
     } else if (frame < FR.S1C) {
-      const k = (frame - FR.S1B) / (FR.S1C - FR.S1B);
-      const dip = (k < 0.5 ? lerp(0, 4, k / 0.5) : lerp(4, 0, (k - 0.5) / 0.5));
-      const settled = k > 0.8;
-      drawSamad(ctx, SAMAD_CENTER_X, SAMAD_TOP + dip, SAMAD_S, "pickup", frame, { showPack: settled });
+      const k = (frame - FR.S1B) / (FR.S1C - FR.S1B);   // 0..1
+      const settled = k > 0.7;
+      // bend down to grab the pack, then straighten back up
+      const dip = settled ? 0 : Math.sin(clamp(k / 0.5, 0, 1) * Math.PI) * 5;
+      drawSamad(ctx, SAMAD_CENTER_X, SAMAD_TOP + dip, SAMAD_S, settled ? "idle" : "pickup", frame, { showPack: settled });
       if (!settled) {
-        const ap = clamp((k - 0.32) / 0.48, 0, 1);
-        drawSmallPack(ctx, lerp(232, 214, ap), lerp(196, 134, ap) - Math.sin(ap * Math.PI) * 28);
-      } else dustCloud(ctx, 222, 142, frame - (FR.S1B + 9), 8);
+        const ap = easeOutCubic(clamp((k - 0.25) / 0.45, 0, 1));   // pack lifts off the floor
+        const floorX = SAMAD_CENTER_X + 8;
+        const floorY = GROUND_Y - 46;
+        const shoulderY = SAMAD_TOP + 44;
+        const px = lerp(floorX, SAMAD_CENTER_X + 4, ap);
+        const py = lerp(floorY, shoulderY, ap) - Math.sin(ap * Math.PI) * 32;
+        drawSmallPack(ctx, px, py, lerp(1.65, 1.15, ap));          // stays large — laptop bag, slight tuck shrink
+      } else {
+        const df = frame - (FR.S1B + 8);
+        const bagCx = SAMAD_CENTER_X + 16;
+        dustCloud(ctx, bagCx, SAMAD_TOP + 50, df, 7);
+        sparkles(ctx, bagCx, SAMAD_TOP + 44, clamp(df / 6, 0, 1), 42, C.glow);
+      }
     } else {
-      const walkK = clamp((frame - FR.S1C) / 18, 0, 1);
+      const walkK = clamp((frame - FR.S1C) / 20, 0, 1);
       const x = lerp(SAMAD_CENTER_X, 348, easeInOut(walkK));
       drawSamad(ctx, x, SAMAD_TOP, SAMAD_S, walkK < 1 ? "walk" : "idle", frame, { showPack: true });
     }
-    return;
-  }
 
   // ===== FRAME 2 — Platformer city =====
-  if (frame < FR.S3) {
+  } else if (frame < FR.S3) {
     const p = (frame - FR.S2) / (FR.S3 - FR.S2 - 1);   // 0..1
     const worldX = lerp(20, 640, p);
     const camX = worldX - 150;
@@ -711,11 +942,9 @@ function drawTinyBackpack(ctx, frame) {
     const fy = feetYAt(worldX);
     drawSamad(ctx, 150 - CITY_W / 2, fy.y - CITY_FEET, CITY_S, fy.air ? "jump" : "walk", frame, { showPack: true });
     drawCounter(ctx, collected);
-    return;
-  }
 
   // ===== FRAME 3 — Stuffing / doesn't fit =====
-  if (frame < FR.S4) {
+  } else if (frame < FR.S4) {
     const lf = frame - FR.S3;          // 0..71
     const lt = lf / FPS;               // 0..3 s
 
@@ -755,24 +984,36 @@ function drawTinyBackpack(ctx, frame) {
 
     drawSamad(ctx, SAMAD_CENTER_X, SAMAD_TOP, SAMAD_S, stuffing ? "stuff" : "defeat", frame, { showPack: true, strain });
 
+    // capacity warning blocks the backpack once the chaos kicks in
+    if (lf >= 16) restrictionSign(ctx, SAMAD_CENTER_X + SAMAD_W / 2, SAMAD_TOP + 48, lf, lf - 16);
+
     if (lt >= 1.5) speechBubble(ctx, SAMAD_CENTER_X + SAMAD_W / 2, SAMAD_TOP - 2, lf - 36, "THESE DON'T FIT!");
     ctx.restore();
-    return;
-  }
 
   // ===== FRAME 4 — Coffee & reflection =====
+  } else {
   const lf = frame - FR.S4;            // 0..71
   drawCoffeeShop(ctx, t);
 
   // gentle fade-in from the chaos of Frame 3
   drawSamad(ctx, SAMAD_CENTER_X, SAMAD_TOP, SAMAD_S, "coffee", frame, { showPack: true });
 
-  // floating heart that rises, pulses, and fades — then repeats
-  const hc = SAMAD_CENTER_X + 12 * SAMAD_S;
-  const cyc = lf % 40;
-  const rise = cyc / 40;
-  const hs = 2 + (Math.sin(lf * 0.5) > 0 ? 1 : 0);
-  drawHeart(ctx, hc, SAMAD_TOP - 14 - rise * 26, hs, "#ff5a6a", clamp(1 - rise, 0, 1) * 0.9);
+  // collected assets pop out above his head, rise, and fade — cycling through all 6
+  const hc = SAMAD_CENTER_X + 12 * SAMAD_S;   // body center
+  const period = 26;
+  for (let k = 0; k < 3; k++) {
+    const tt = lf + k * 9;                     // staggered streams
+    const rise = (tt % period) / period;
+    const a = GASSETS[Math.floor(tt / period) % GASSETS.length];
+    const driftX = (k - 1) * 18 + Math.sin(tt * 0.2) * 3;
+    const ax = Math.round(hc - 8 + driftX);    // integer pos → crisp pixels
+    const ay = Math.round(SAMAD_TOP - 6 - rise * 40);
+    const alpha = clamp(1 - rise * 0.85, 0, 1);
+    ctx.globalAlpha = alpha;
+    drawGameAsset(ctx, ax, ay, a, alpha * 0.45);   // native 16px, lighter glow → clearer
+    ctx.globalAlpha = 1;
+    if (rise < 0.18) sparkles(ctx, ax + 8, ay + 8, rise / 0.18, k * 7 + Math.floor(tt / period), a.color);
+  }
 
   // mug steam
   ctx.globalAlpha = 0.45;
@@ -784,14 +1025,68 @@ function drawTinyBackpack(ctx, frame) {
 
   if (lf < 6) whiteFlash(ctx, 1 - lf / 6);   // fade in
   if (frame >= FR.RESET) whiteFlash(ctx, (frame - FR.RESET) / (FR.TOTAL - FR.RESET));   // loop reset
+  }
+
+  drawSceneLabelBar(ctx, frame);
 }
 
-// ── Scene label ────────────────────────────────────────────────────────────────
+// ── Scene label (drawn on canvas so GIF export includes it) ───────────────────
 function sceneLabel(frame) {
-  if (frame < FR.S2) return "FRAME 1 — LEAVING FOR PLAYABLE ADVENTURE";
-  if (frame < FR.S3) return "FRAME 2 — COLLECTING PLAYABLE ASSETS";
-  if (frame < FR.S4) return "FRAME 3 — FITTING THE ASSETS IN PLAYABLE";
-  return "FRAME 4 — IS THE 5MB LIMIT STILL THE BEST?";
+  if (frame < FR.S2) return "FRAME 1 — LEAVING FOR PLAYABLE AD ADVENTURE";
+  if (frame < FR.S3) return "FRAME 2 — COLLECTING PLAYABLE AD ASSETS";
+  if (frame < FR.S4) return "FRAME 3 — FITTING THE ASSETS IN PLAYABLE AD";
+  return "FRAME 4 — IS THE 5MB LIMIT STILL THE BEST ANSWER FOR 2026?";
+}
+
+function drawSceneLabelBar(ctx, frame) {
+  const text = sceneLabel(frame);
+  if (!text) return;
+
+  const m = ctx.getTransform();
+  const sx = m.a || 1, sy = m.d || 1;
+
+  // Measure at 1:1 so export scale does not skew layout math.
+  let fontPx = 9;
+  let tw, bw, bh, bx, by;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.font = fontPx + 'px "Press Start 2P", monospace';
+  tw = ctx.measureText(text).width;
+  const maxInner = W - 20;
+  while (tw + 24 > maxInner && fontPx > 7) {
+    fontPx--;
+    ctx.font = fontPx + 'px "Press Start 2P", monospace';
+    tw = ctx.measureText(text).width;
+  }
+  const padX = 12, padY = 6;
+  bw = Math.ceil(tw) + padX * 2;
+  bh = fontPx + padY * 2;
+  bx = Math.round((W - bw) / 2);
+  by = H - bh - 10;   // pinned to bottom of the 480×270 frame
+  ctx.restore();
+
+  // Draw in scene space (keeps exportScale) — never reset transform to identity here.
+  ctx.save();
+  ctx.setTransform(sx, 0, 0, sy, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.globalAlpha = 0.9;
+  drawRect(ctx, bx, by, bw, bh, "#0a0a1a");
+  ctx.globalAlpha = 1;
+  drawRect(ctx, bx, by, bw, 2, "#ff00ff");
+  drawRect(ctx, bx, by + bh - 2, bw, 2, "#ff00ff");
+  drawRect(ctx, bx, by, 2, bh, "#ff00ff");
+  drawRect(ctx, bx + bw - 2, by, 2, bh, "#ff00ff");
+  ctx.fillStyle = "#00ffff";
+  ctx.shadowColor = "#00ffff";
+  ctx.shadowBlur = 6;
+  ctx.font = fontPx + 'px "Press Start 2P", monospace';
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, bx + bw / 2, by + bh / 2);
+  ctx.shadowBlur = 0;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.restore();
 }
 
 Object.assign(window, { drawTinyBackpack, sceneLabel, FR, FPS });
